@@ -27,11 +27,33 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     });
 });
 
-// Mobile menu (only shows on <= 980px, but won’t change desktop positions)
+// Mobile menu
 const burger = document.getElementById('burger');
-burger?.addEventListener('click', () => {
-    document.querySelector('.nav-center')?.classList.toggle('open');
+const navCenter = document.querySelector('.nav-center');
+
+function closeMenu() {
+    navCenter?.classList.remove('open');
+    burger?.setAttribute('aria-expanded', 'false');
+    document.documentElement.classList.remove('menu-open');
+}
+function toggleMenu() {
+    navCenter?.classList.toggle('open');
+    const open = navCenter?.classList.contains('open');
+    burger?.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.documentElement.classList.toggle('menu-open', open);
+}
+
+burger?.addEventListener('click', toggleMenu);
+document.querySelectorAll('.nav-center .nav-link').forEach(a => {
+    a.addEventListener('click', closeMenu);
 });
+
+// Optional: prevent background scroll when menu is open
+/* in CSS you can add:
+html.menu-open, body.menu-open { overflow: hidden; }
+*/
 // Footer year
 document.getElementById('year').textContent = new Date().getFullYear();
+
+
 
